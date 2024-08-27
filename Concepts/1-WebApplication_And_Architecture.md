@@ -180,3 +180,192 @@ Online games, utility apps like to do, etc.
     - **Example:** In an online game like VALORANT, if we buy a gun skin, it will show that gun skin to everyone in the game since the data has been persisted on the database.
 - **Client-side rendering**, for one-tier or two tier applications, we may be rendering the user interface on the client
     - **Example:** In Runescape, users are able to use popular Cheat Engine to change the code of the business logic within the user interface to give themselves more money. However, it will only show on their client and not other clients since the data has not been persisted.
+<br>
+
+## Client-Server Communication
+
+**What is it?** It uses the request-response model, the *client* sends the request and the *server* responds. If there is no request then there is no response.
+
+**How does it work?:** It works using the following:
+
+- HTTP Protocols
+    - Entire communication happens over HTTP protocol (request-response protocol), used for data exchange over the world wide web.
+    - Defines how the information is transmitted over the web.
+- REST API and API Endpoints
+    - Modern n-tier web applications, every *client* has to hit a REST endpoint to fetch the data from the backend.
+    - Backend application code has a REST API implemented.
+    - **Example:**
+        
+        ![rest-api](../resources/rest-api.png)
+        
+        - Objective:
+            - Let's say we want to write an application to keep track of birthdays to all Facebook friends and send a reminder beforehand.
+        - Implementation:
+            - First step is to get ALL of the birthdays of our friends
+                - Write a client to hit the *Facebook Social Graph API* which is a REST API to get the data then run business logic on the data.
+
+### REST API
+
+**What is it?** Stands for *Representational State Transfer*. It is an architectural style for implementing web services.
+https://www.youtube.com/watch?v=_YlYuNMTCc8
+
+**How does it work?:**
+
+- It acts as an interface
+- Takes advantage of HTTP methodologies to establish communication between the client and the server.
+- Allows servers to cache the response to improve application performance.
+- It is a **stateless process**, meaning communication between client and server is a *new* one.
+    - No information or memory is carried over from previous communications.
+    - ***So everytime the client interacts with the server, the authentication must also be sent with it.***
+
+#### Rest Endpoints
+
+**What is it?** Means URL of the service that the client could hit: `https://myservice.com/users/{username}` for fetching user details of a particular user.
+
+1. **GET** (Retrieve a list of books or a specific book): **THERE IS ALSO PATH/QUERY STRINGS SEE BELOW**
+    
+    ```jsx
+    // Get all books
+    app.get('/api/books', (req, res) => {
+        // Logic to fetch and return all books
+    });
+    
+    // Get a specific book by ID
+    app.get('/api/books/:id', (req, res) => {
+        // Logic to fetch a book by req.params.id
+    });
+    ```
+    
+2. **POST** (Create a new book):
+    
+    ```jsx
+    app.post('/api/books', (req, res) => {
+        // Logic to create a new book from req.body
+    });
+    ```
+    
+3. **PUT** (Update a specific book):
+    
+    ```jsx
+    app.put('/api/books/:id', (req, res) => {
+        // Logic to update an existing book using req.params.id and req.body
+    });
+    ```
+    
+4. **DELETE** (Delete a specific book):
+    
+    ```jsx
+    app.delete('/api/books/:id', (req, res) => {
+        // Logic to delete a book using req.params.id
+    });
+    ```
+    
+5. **PATCH** (Partially update a specific book):
+    
+    ```jsx
+    app.patch('/api/books/:id', (req, res) => {
+        // Logic to partially update a book using req.params.id and req.body
+    });
+    ```
+    
+6. **OPTIONS** (Discover communication options for the API):
+    
+    ```jsx
+    app.options('/api/books', (req, res) => {
+        // Logic to return the supported HTTP methods for the /api/books endpoint
+        res.header('Allow', 'GET, POST, PUT, DELETE, PATCH, OPTIONS').send();
+    });
+    ```
+    
+7. **HEAD** (Retrieve headers for a specific book resource):
+    
+    ```jsx
+    app.head('/api/books/:id', (req, res) => {
+        // Logic to fetch headers for a book using req.params.id
+        // The body of the response should be empty
+    });
+    ```
+    
+
+**Front End code**
+
+1. **Front-End Code for Path Parameter Example with Axios (GET a specific book):**
+    
+    Fetching a specific book by its ID using a path parameter:
+    
+    ```html
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function getBookById(bookId) {
+            axios.get(`/api/books/${bookId}`)
+                .then(response => {
+                    console.log('Book:', response.data);
+                    // Handle the book data (e.g., display it on the page)
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    
+        getBookById('1'); // Example: Fetch the book with ID '1'
+    </script>
+    
+    ```
+    
+2. **Front-End Code for Query String Example with Axios (GET books with optional filters):**
+    
+    Fetching books with optional filters like author and year using query strings:
+    
+    ```html
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function getBooksByFilter(author, year) {
+            const params = {};
+            if (author) params.author = author;
+            if (year) params.year = year;
+    
+            axios.get('/api/books', { params })
+                .then(response => {
+                    console.log('Filtered Books:', response.data);
+                    // Handle the filtered books data (e.g., display it on the page)
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    
+        getBooksByFilter('Author A', 2001); // Example: Fetch books by 'Author A' published in 2001
+    </script>
+    
+    ```
+    
+
+**Back End code**
+
+1. **Path Parameters**: These are used to identify a specific resource. They are part of the URL path.
+    
+    ```jsx
+    // Example: GET /api/books/:bookId
+    app.get('/api/books/:bookId', (req, res) => {
+        const bookId = req.params.bookId;
+        // Logic to retrieve the book with the given bookId
+    });
+    ```
+    
+    In this case, **`:bookId`** is a path parameter that would be replaced with the actual ID of the book you want to retrieve.
+    
+2. **Query Strings**: These are used for filtering, searching, or detailed specification of the request, usually in GET requests.
+    
+    ```jsx
+    // Example: GET /api/books?author=JKRowling&published=1997
+    app.get('/api/books', (req, res) => {
+        const author = req.query.author;
+        const publishedYear = req.query.published;
+        // Logic to retrieve books based on author and published year
+    });
+    ```
+    
+    Here, **`author`** and **`published`** are query parameters that can be used to filter the books based on the author's name and the year they were published.
+    
+
+#### Decouples Clients & Backend Service
+
+**What is it?** Back-end service does not have to worry about client implementation. It just tells clients that "*Here is a URL address of the resource/information you need. Hit it when you need it. Any client with the required authorization can access it.*"
+
+Developers can have different implementations for different clients, allowing to leverage different technologies. This means clients and backend service are ***decoupled***.
