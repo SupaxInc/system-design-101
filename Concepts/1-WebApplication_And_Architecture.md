@@ -77,7 +77,7 @@ Instagram, Facebook, Tiktok, Uber, Airbnb, Roblox, etc.
 
 It is important for the two following software design principles:
 
-### → Single Responsibility Principle
+#### Single Responsibility Principle
 
 - Means giving one dedicated responsibility to a client and letting it execute flawlessly.
     - Saving data, running app logic, or ensuring delivery of the messages throughout system
@@ -88,9 +88,95 @@ It is important for the two following software design principles:
     - Database should not hold business logic, only used for **persisting data**
     - Should just have a separate tier to handle the business logic another way.
 
-### → Separation of Concerns
+#### Separation of Concerns
 
 - Allows members to only be concerned about their own work.
 - Keeping components separate makes them reusable.
     - Different services can use the same database, messaging server, or any other component as long as they are not *tightly coupled*.
     - *Loosely coupled* components allows us to scale our service easily.
+
+## Differences Between Layers and Tiers
+
+- **Layers** are UI layer, business, service and data access layers
+    
+    ![layers](../resources/layers.png)
+    
+    - It represents conceptual organization of code
+- **Tiers** are UI client, servers, database, messaging queues, load balancers, search servers, etc.
+    - It represents the physical separation of components
+
+<br><br>
+
+
+# Web Architecture
+
+**What is it?**
+
+Involves multiple components like database, message queue, cache, UI client, etc. All running in conjunction to form an online service.
+
+**Example:**
+
+The picture below dictates a web application architecture.
+
+![web-app-architecture](../resources/web-app-architecture2.png)
+
+## Client-Server Architecture
+
+**What is it?** The client-server architecture is the one tier, two tier, three tier, and n tier architecture.
+
+**How does it work?:**
+
+- It works in a request-response model
+    - *Client* sends a request to the server for information and the *Server* responds to it.
+- Differs from a peer-to-peer architecture
+
+### Client
+
+**What is it?** Holds the user interface, it is the presentation part of the application written in HTML, Javascript, CSS.
+
+**How does it work?:**
+
+- UI runs on the client, it is the gateway of our application.
+- Can be a mobile app, website, desktop, or tablet.
+- It could use a variety of different technologies and frameworks including Javascript, jQuery, React, Angular, Vue, Svelte, etc.
+
+**Different type of clients:** Thin and thick clients
+
+---
+
+#### Thin
+
+**What is it?** A thin client just holds the user interface of the application and contains **no business logic**. For every action, the client sends a request to the backend server where the business logic is. Similarly to a **three-tier** application.
+
+**Example:**
+
+The picture below dictates how it works (three tier application), back-end logic resides in back-end server which connects to database.
+
+![thin-client](../resources/thin-client.png)
+
+#### Thick
+
+**What is it?** Thick client holds all or some part of the business logic. Similarly to a **two-tier** application.
+
+**Example:**
+
+Online games, utility apps like to do, etc.
+
+![thick-client](../resources/thick-client.png)
+
+### Server
+
+**What is it?** Receives requests from the client and provides a response after executing the business logic based on request parameters received from the client.
+
+**How does it work?:**
+
+- Every online service needs a server to run, aka application servers.
+- Besides application servers, there are other kind of servers that run specific tasks
+    - Includes: proxy, mail, file, virtual data storage, batch job servers.
+- Server configuration can differ depending on the use case
+    - **Example:** If we run a back-end application code written in Javas, we would pick *Apache Tomcat* or *Jerry*
+    - For a hosting website, we would pick an *Apache HTTP Server*
+- **Server-side rendering**, often devs use a server to render the user interface on the backend, then send the generated data to the client
+    - **Example:** In an online game like VALORANT, if we buy a gun skin, it will show that gun skin to everyone in the game since the data has been persisted on the database.
+- **Client-side rendering**, for one-tier or two tier applications, we may be rendering the user interface on the client
+    - **Example:** In Runescape, users are able to use popular Cheat Engine to change the code of the business logic within the user interface to give themselves more money. However, it will only show on their client and not other clients since the data has not been persisted.
