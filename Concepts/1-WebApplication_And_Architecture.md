@@ -580,8 +580,6 @@ Long polling is different to normal polling. Uses both HTTP Push and HTTP Pull b
     - Good for SEO, crawlers easily read generated content.
     - **Can combine both server-side rendering for static content and client-side rendering for dynamic content.**
 <br><br>
-
----
     
 ## Web Hooks
 
