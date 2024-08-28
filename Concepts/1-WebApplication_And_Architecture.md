@@ -6,9 +6,10 @@
 
 **What is a component?** Database, back-end server, user interface, messaging, caching, etc.
 
-![web-app-architecture](../resources/web-app-architecture.png)
+![web-app-architecture](resources/web-app-architecture.png)
+<br>
 
- 
+ ---
 
 ### Single Tier
 
@@ -16,7 +17,7 @@
 
 **Examples:** MS Office, PC Games, image editing like Gimp and Photoshop
 
-![single-tier](../resources/single-tier.png)
+![single-tier](resources/single-tier.png)
 
 **Pros:**
 
@@ -30,6 +31,9 @@
 1. Big downside is application's publisher has no control over the application. For patches/updates, customer must manually update it by connecting to the server.
     1. Ex. In the 90's, when a game was shipped with buggy code, studios could do nothing to fix it.
 2. Code is very vulnerable and can be changed/reverse engineered. Someone can profit of it.
+<br>
+
+---
 
 ### Two Tier
 
@@ -39,7 +43,7 @@ This service largely depends on business requirements and use case. Moving the *
 
 **Examples:** Web/mobile apps (to-do list, planner, productivity), web/mobile games, etc.
 
-![two-tier](../resources/two-tier.png)
+![two-tier](resources/two-tier.png)
 
 **Pros**
 
@@ -48,6 +52,9 @@ This service largely depends on business requirements and use case. Moving the *
     - **Examples:** To do-lists, the app only makes a call to the database server only when the user has finished creating their list and wants to **persist** the data.
     - Browser/mobile games, files are downloaded once the user uses the app for the first time but only make network calls to **persist game state**.
 - Fewer server calls means less money spent to keep servers running.
+<br>
+
+---
 
 ### Three Tier
 
@@ -55,7 +62,7 @@ This service largely depends on business requirements and use case. Moving the *
 
 **Examples:** Largely used in the web (blogs, news websites, etc)
 
-![three-tier](../resources/three-tier.png)
+![three-tier](resources/three-tier.png)
 
 **Pros:**
 
@@ -99,7 +106,7 @@ It is important for the two following software design principles:
 
 - **Layers** are UI layer, business, service and data access layers
     
-    ![layers](../resources/layers.png)
+    ![layers](resources/layers.png)
     
     - It represents conceptual organization of code
 - **Tiers** are UI client, servers, database, messaging queues, load balancers, search servers, etc.
@@ -118,7 +125,7 @@ Involves multiple components like database, message queue, cache, UI client, etc
 
 The picture below dictates a web application architecture.
 
-![web-app-architecture](../resources/web-app-architecture2.png)
+![web-app-architecture](resources/web-app-architecture2.png)
 
 ## Client-Server Architecture
 
@@ -152,7 +159,9 @@ The picture below dictates a web application architecture.
 
 The picture below dictates how it works (three tier application), back-end logic resides in back-end server which connects to database.
 
-![thin-client](../resources/thin-client.png)
+![thin-client](resources/thin-client.png)
+
+---
 
 #### Thick
 
@@ -162,7 +171,8 @@ The picture below dictates how it works (three tier application), back-end logic
 
 Online games, utility apps like to do, etc.
 
-![thick-client](../resources/thick-client.png)
+![thick-client](resources/thick-client.png)
+<br>
 
 ### Server
 
@@ -196,13 +206,16 @@ Online games, utility apps like to do, etc.
     - Backend application code has a REST API implemented.
     - **Example:**
         
-        ![rest-api](../resources/rest-api.png)
+        ![rest-api](resources/rest-api.png)
         
         - Objective:
             - Let's say we want to write an application to keep track of birthdays to all Facebook friends and send a reminder beforehand.
         - Implementation:
             - First step is to get ALL of the birthdays of our friends
                 - Write a client to hit the *Facebook Social Graph API* which is a REST API to get the data then run business logic on the data.
+<br>
+
+---
 
 ### REST API
 
@@ -217,6 +230,8 @@ https://www.youtube.com/watch?v=_YlYuNMTCc8
 - It is a **stateless process**, meaning communication between client and server is a *new* one.
     - No information or memory is carried over from previous communications.
     - ***So everytime the client interacts with the server, the authentication must also be sent with it.***
+
+---
 
 #### Rest Endpoints
 
@@ -364,8 +379,167 @@ https://www.youtube.com/watch?v=_YlYuNMTCc8
     Here, **`author`** and **`published`** are query parameters that can be used to filter the books based on the author's name and the year they were published.
     
 
-#### Decouples Clients & Backend Service
+#### Helps Decouple Clients & Backend Service
 
-**What is it?** Back-end service does not have to worry about client implementation. It just tells clients that "*Here is a URL address of the resource/information you need. Hit it when you need it. Any client with the required authorization can access it.*"
+Back-end service does not have to worry about client implementation. It just tells clients that "*Here is a URL address of the resource/information you need. Hit it when you need it. Any client with the required authorization can access it.*"
 
 Developers can have different implementations for different clients, allowing to leverage different technologies. This means clients and backend service are ***decoupled***.
+<br>
+
+---
+
+
+### HTTP Push and Pull
+
+**What is it?** There are two different modes of data transfer between client and server, HTTP PUSH and HTTP PULL.
+
+**How does it work?:**
+
+- HTTP PULL
+    - The client sends the request and the server responds with the data
+        - This is the ***default mode*** of HTTP communication called HTTP PULL
+    - The client *pulls* the data from the server whenever required and does it repeatedly to fetch the latest data.
+    - One *important* thing to note, each request to the server and the response ***consumes bandwidth***.
+        - This costs the business money and adds to the load on the server.
+    - ***What if there is no data available on the server every time the client sends a request?***
+        - The client wouldn't know this so it would keep sending requests over and over.
+        - Excessive pulls by clients have potential to bring down the server.
+        - Examples: Normal Polling
+    - Ajax long polling is also used here, it will do requests at intervals
+- HTTP PUSH
+    - To fix the issue if no data is available on the server every time the client sends a request, HTTP PUSH mechanism is used.
+        - The client can send just one request just once.
+        - After the first request, the ***server will keep pushing new updates to the clients whenever they are available***.
+    - The client does not have to worry about sending additional requests to the server for data.
+        - Saves a lot of network bandwidth.
+    - A common example are *user notifications*, we get notified whenever an event happens on the backend.
+    - Clients use Asynchronous Javascript & XML (AJAX) to send requests to the server in both HTTP PULL and PUSH mechanism.
+    - **Multiple technologies:**  Web Sockets, HTML5 Event Source, Message Queues, Streaming over HTTP
+
+--- 
+
+#### PULL, Ajax Long Polling
+
+**What is it?** There are two ways of pulling/fetching data from the server, using a manual HTTP GET request to the server using a user interface OR *pulling data dynamically at regular intervals using AJAX without human intervention* AKA polling.
+
+Long polling is different to normal polling. Uses both HTTP Push and HTTP Pull based on BAYEUX protocol while normal polling just uses HTTP Pull.
+
+**How does it work?:**
+
+- Uses AJAX (Asynchronous Javascript & XML), used for adding asynchronous behaviour to the web page.
+    
+    ![ajax-long-polling](resources/ajax-long-polling.png)
+    
+    - As shown above, instead of requesting data manually, we fetch the updated data from the server by sending requests in intervals.
+        - In React, this could be as simple as using the `useInterval` hook.
+        https://blog.bitsrc.io/polling-in-react-using-the-useinterval-custom-hook-e2bcefda4197
+    - Upon receiving a response, a particular section of the web page will dynamically change by the *callback method*.
+- Uses *XMLHttpRequest* to send requests to the server, this object is built in the browser and uses Javascript to update the HTML DOM
+- Most commonly used in jQuery framework to implement asynchronous behaviour on the UI.
+
+---
+
+#### PUSH
+
+**How does it work?:** Using time to live, persistent connection, and heartbeat interceptors allows us to keep pushing data to the client when it is available.
+<br>
+
+##### Time to Live (TTL)
+
+- Time to Live (TTL)
+    - In a regular client-server communication which is HTTP PULL, there is a TTL for every request. It could be 30 to 60 secs depending on browser.
+    - If the client does not receive a response within the TTL, the browser kills the connection and client has to re-send the request hoping it receives the data before TTL ends again.
+        - Open connections consumes resources and there is a limit to number of open connections on a server at once.
+        - **If connections don't close, the server will run out of memory, hence why TTL is used.**
+    - *What if we are certain that the response will take more time than the TTL set by the browser?*
+
+---
+
+##### Persistent Connection
+
+- It is a network connection between client and server that remains open for future requests and responses
+    
+    ![persistent-connection](resources/persistent-connection.png)
+    
+- If the response will take more time than the TTL, the we need a *persistent connection* between client and server.
+- If the frequency of request and response between client and server is too high then we also need a *persistent connection*.
+
+**Implemented by using:** We can implement a long opened connection using AJAX long polling, web sockets, server-sent events, etc.
+
+---
+
+###### Heartbeat Interceptors
+
+- Heartbeat Interceptors
+    - *How is a persistent connection possible if the browser kills the open connections to the server every x seconds?*
+    - With the help of *heartbeat interceptors* we are able to keep the connection open
+    - **These are just blank request responses between client and server to prevent the browser from killing the connection**
+- This is very **resource intensive**, it will consume a lot of resources compared to HTTP Pull behaviour.
+    - But there could be uses cases where we need to use a persistent connection that is vital for an app.
+    - **Example:** A browser-based multiplayer game has a large amount of request-response activity within a small timeframe, it would be smart to establish a persistent connection between client and server
+<br>
+
+---
+
+#### Technologies for Long Opened Connection
+
+##### Web Sockets
+
+**What is it?** For client-server bi-directional low latency data flow.
+**Examples:** Messaging, chat applications, real-time social streams, browser based multiplayer games. Apps that contain a significant number of read writes compared to a regular web app.
+
+**How does it work?:**
+
+- Uses TCP/IP connection instead of HTTP. **Full Duplex Communication**.
+- Server and client should both support web sockets
+- Connection steps:
+    - Client requests an HTTP request (GET) to the server asking to open a connection
+    - If the server accepts then it creates a 101 switching protocols response
+    - This will complete the handshake opening the TCP/IP connection that allows for *bi-directional messaging*
+    - Communication stays open until one of the parties drop (client or server) then TCP resources can be unallocated
+
+---
+
+##### AJAX Long Polling
+
+**What is it?** *Long polling* is between AJAX and Web Sockets. Instead of requesting data manually, we fetch the updated data from the server by sending requests in intervals.
+**Examples:** Dynamically update web pages asynchronously.
+
+**How does it work?:**
+
+- Instead of immediately returning an empty response, the server will hold the response until it finds an update to be sent to the client.
+    - As opposed to normal polling where it receives a response instantly which could be an empty response
+- Connections in long polling stays open a bit longer than normal polling. If the connection breaks, the client has to re-establish the connection with the server.
+- Fewer requests sent to the server than regular polling which cuts down network bandwidth consumption.
+- Can be used in simple asynchronous fetch when you don't want to poll the server.
+
+### → → HTML 5 Event-Source API & Server Sent Events (SSE)
+
+**What is it?** Server sent events (SSE) automatically pushes the data to the client when updates are available. *It does not wait for any polling requests*. Incoming messages from the server are treated as events.
+**Examples:** Real-time Twitter feed, displaying stock quotes, real-time notifications.
+
+**How does it work?:**
+
+- Servers can send data to the client once the client has established a connection with an initial request.
+    - Helps eliminate blank request-responses cutting down network bandwidth consumption
+- It is only ***one-direction communication*** from *server to client*
+    - As opposed to websockets where it is bi-directional
+- To implement
+    - Back-end language must support it
+    - Front-end UI, HTML5 Event-Source API will be used to receive the data from the server
+
+---
+
+##### Streaming over HTTP
+
+**What is it?** For cases where we need to stream extensive data over HTTP by breaking it into smaller chunks. Made possible using HTML5 and Javascript Stream API.
+**Examples:** Multimedia content (large images and videos) over HTTP
+
+**How does it work?**
+
+- Allows us to watch a partially downloaded video as it downloads by the playing the downloaded chunks on the client.
+- Both client and server must agree to conform to the streaming settings to stream data.
+    - Helps determine when the stream begins and ends over an HTTP request-response model
+- Differences between REST API and Streaming API:
+    
+    ![streaming-http](resources/streaming-http.png)
