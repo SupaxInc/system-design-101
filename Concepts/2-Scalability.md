@@ -149,6 +149,11 @@ It means to add more servers to the existing hardware resource pool. This increa
 - In distributed systems, this pattern fails as each server will have its instance of **`Singleton`**, leading to inconsistent states across the system.
 - Solutions:
     - Implement Redis or Memcache to manage a consistent state across the application by storing shared data in these distributed caching systems. This approach ensures that all instances of the application, regardless of which server they are on, can access and modify the same state information in real-time. <br>**Example:** Amazon Elasticache
+        - Ensures all application instances access the same state information in real-time
+        - Improves application performance by reducing database load
+        - Automatically handles node failures and replacements
+        - Provides easy scalability to handle increasing workloads
+        - Offers monitoring and metrics through Amazon CloudWatch
     - Avoid using static instances in classes to prevent state persistence that is local to a single machine.
     - Consider adopting functional programming principles where functions do not retain state, although this can also be achieved with careful design in OOP.
     - Employ containerization technologies like Docker to ensure consistent environments across multiple machines, facilitating scalability and state management.
@@ -159,3 +164,71 @@ It means to add more servers to the existing hardware resource pool. This increa
 
 - Always have an estimate in mind for how much traffic will it have to deal with when designing an app.
 - Possibly adopting a ***microservices*** architecture and workloads are meant to be deployed on the cloud. Inherently the workloads are *horizontally scaled* out on the fly
+<br><br>
+
+## Primary Bottlenecks of Scalability
+
+### Database
+
+- Scenario:
+    - Imagine a well architected application. Workload runs on multiple nodes and can scale horizontally.
+    - But the *database* is a poor single ***monolith***. One server has the onus of handling data requests from all of the server nodes.
+- The scenario above is a ***bottleneck***
+    - The architecture of the nodes are great and handle millions of requests at one point in time efficiently.
+    - Yet the response time/latency of the requests are abysmal due to just having *one database*.
+- **Solution:** Use database partitioning/sharding with multiple database servers to make the system efficient.
+
+---
+
+### Poor Application Design
+
+- A poorly designed architecture can become a bottle neck.
+- A typical architecture mistake is not *using asynchronous processes* and modules wherever required, rather than process are scheduled sequentially.
+- Scenario:
+    - If a user uploads a document in a portal, tasks such as sending confirmation email or a notification to all subscribers/listeners to the upload event should be done *asynchronously*.
+- **Solution:** Tasks like these should be forwarded to a *messaging server* or a *task queue*.
+
+---
+
+### Not Using Caching Wisely
+
+- Caching can be deployed at several layers of the application.
+    - Speeds up the response time by notches
+    - Intercepts requests before they hit origin servers
+- If the system has static data, caching can bring down deployed costs significantly.
+
+---
+
+### Inefficient Config and Setup of Load Balancers
+
+- *Load balancers* are the gateway to the application.
+- Using too many or few of them impacts the latency of the application.
+
+---
+
+### Adding Business Logic to Database
+
+- Business logic in the database makes the application components ***tightly coupled***.
+    - Make us have a ton of code refactoring when migrating to a different database.
+    - Testing gets very complex.
+
+---
+
+### Not Picking the Right Database
+
+- Picking the right database is vital for businesses
+- Need transactions and strong consistency?
+    - Use relational database
+- Don't require strong consistency rather than need *horizontal scalability*
+    - Pick NoSQL database
+
+---
+
+### At the Code Level
+
+- Inefficient and poorly written code has the potential to bring down an entire service in production.
+    - Writing tighly coupled code
+    - Unnecessary loops or nested loops
+    - Not paying attention to Big-O complexity
+- Do a ***DENTAL*** check of our code when doing a dry run
+    - Documentation, Exception handling, Null pointers, Time complexity, Test Coverage
