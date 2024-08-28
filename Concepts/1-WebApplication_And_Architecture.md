@@ -513,7 +513,9 @@ Long polling is different to normal polling. Uses both HTTP Push and HTTP Pull b
 - Fewer requests sent to the server than regular polling which cuts down network bandwidth consumption.
 - Can be used in simple asynchronous fetch when you don't want to poll the server.
 
-### → → HTML 5 Event-Source API & Server Sent Events (SSE)
+---
+
+##### HTML 5 Event-Source API & Server Sent Events (SSE)
 
 **What is it?** Server sent events (SSE) automatically pushes the data to the client when updates are available. *It does not wait for any polling requests*. Incoming messages from the server are treated as events.
 **Examples:** Real-time Twitter feed, displaying stock quotes, real-time notifications.
@@ -543,3 +545,50 @@ Long polling is different to normal polling. Uses both HTTP Push and HTTP Pull b
 - Differences between REST API and Streaming API:
     
     ![streaming-http](resources/streaming-http.png)
+<br><br>
+
+---
+
+### Client-Side vs Server-Side Rendering
+
+#### Client-Side Rendering
+
+**What is it?** When a browser receives a web page from the server in response, it has to render the response on the window in the form of an HTML page.
+
+**How does it work?:**
+
+- To render the web page, the browser has several components: browser engine, rendering engine, Javascript interpreter, Networking and UI backend, Data storage, etc.
+- Browser does a lot of work to convert the response from the server into an HTML page.
+- This takes some time before the user can interact with the page.
+- Use cases:
+    - Modern websites are highly dependent on AJAX, contents for a page has to be fetched and rendered asynchronously.
+        - This won't work for *server-side rendering* since for every AJAX request it will generate the *entire page* on the server rather than updating the certain content on the page in response for client rendering. Which is very *resource intensive* and consume bandwidth.
+    - Can combine both server-side rendering for static content and client-side rendering for dynamic content.
+
+---
+
+#### Server-Side Rendering
+
+**What is it?** Ensures faster rendering of the UI, averting the UI loading time in the browser window because the page is already created and the browser doesn't have to do much assembling and rendering work.
+
+**How does it work?:**
+
+- Developers may render the UI on the server, generate the HTML there then directly send the HTML page to the UI.
+- Number of concurrent users on the website goes up, server-side rendering will exert an unnecessary load on the server as it is continuously generating the page on the server with more users.
+- Use cases:
+    - Perfect for delivering static content like WordPress blogs.
+    - Good for SEO, crawlers easily read generated content.
+    - **Can combine both server-side rendering for static content and client-side rendering for dynamic content.**
+<br><br>
+
+---
+    
+## Web Hooks
+
+To use the Webhooks, consumers register an HTTP endpoint with the service with a unique API Key. It’s like a phone number. Call me on this number when an event occurs. I won’t be calling you anymore.
+
+Whenever new information is available on the backend, the server fires an HTTP event to all the registered endpoints of the consumers, notifying them of the latest update.
+
+![web-hooks](resources/web-hooks.png)
+
+Browser notifications are one example of Webhooks. Instead of visiting the websites every now and then for new info, they notify us when they publish new content.
