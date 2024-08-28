@@ -101,3 +101,61 @@ It means to add more servers to the existing hardware resource pool. This increa
 - As traffic climbs, we are able to add additional servers to the *hardware resource pool*, and if it drops, we remove servers.
 - Gives us the concept of ***high availability***
     - Multiple server nodes on the back end helps the website stay online even if some server nodes crash
+<br><br>
+
+## Scalability Design Approach
+
+### Vertical vs Horizontal Scaling
+
+- We need to find out if we require high availability or low availability.
+    - High availability means horizontal scaling
+    - Low availability means to vertical scale but have more powerful servers
+- Upsides of horizontal scaling is no limit to augmenting hardware capacity, data is replicated across different geographical regions across the globe
+- Examples:
+    - If your app is a utility or tool and is expected to receive ***minimal predictable traffic***.
+        - No need to host it in a distributed environment. A single server is enough to manage traffic so we can go with vertical scaling.
+    - If app is a public facing social app, like a social network or fitness app ***where traffic is unpredictable.***
+        - High availability in horizontal scaling is important
+    - Build these apps to deploy them on cloud and always have horizontal scalability in mind.
+
+---
+
+### Thinking about code on multiple machines, stateless
+
+- Running code in a distributed environment must be ***stateless***.
+- No *static instances* in classes.
+    - Static instances hold application data when a particular server goes down, all static data/state is lost.
+- In OOP, instance variables hold object state.
+    - Static variable hold state that spans across multiple objects.
+    - Static variable data is not application wide.
+- **Problem**: Using static instances can lead to issues in a distributed environment. If a server holding static data goes down, the data is lost, and other servers in the cluster won't have access to this data.
+- **Example**: Avoid patterns like Singleton which rely on static instances.
+    
+    ```java
+    public class Singleton {
+        private static Singleton instance;
+    
+        private Singleton() {}
+    
+        public static Singleton getInstance() {
+            if (instance == null) {
+                instance = new Singleton();
+            }
+            return instance;
+        }
+    }
+    ```
+    
+- In distributed systems, this pattern fails as each server will have its instance of **`Singleton`**, leading to inconsistent states across the system.
+- Solutions:
+    - Implement Redis or Memcache to manage a consistent state across the application by storing shared data in these distributed caching systems. This approach ensures that all instances of the application, regardless of which server they are on, can access and modify the same state information in real-time. <br>**Example:** Amazon Elasticache
+    - Avoid using static instances in classes to prevent state persistence that is local to a single machine.
+    - Consider adopting functional programming principles where functions do not retain state, although this can also be achieved with careful design in OOP.
+    - Employ containerization technologies like Docker to ensure consistent environments across multiple machines, facilitating scalability and state management.
+
+---
+
+### Which Scalability is Right?
+
+- Always have an estimate in mind for how much traffic will it have to deal with when designing an app.
+- Possibly adopting a ***microservices*** architecture and workloads are meant to be deployed on the cloud. Inherently the workloads are *horizontally scaled* out on the fly
