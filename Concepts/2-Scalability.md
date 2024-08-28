@@ -48,3 +48,56 @@ In terms of big O notation. Ideally we want something O(1) which is constant tim
 - Examples:
     - In an MMO game, a slight lag in-game ruins whole experiences. Reaction times are very important.
     - Algorithmic trading services need to process events in milliseconds.
+<br><br>
+
+## Types of Scalability
+
+An application needs solid computing power, servers should be powerful enough to handle increased traffic loads.
+
+---
+
+### Vertical Scaling
+
+**What is it?** It means to add more power to our server.<br>
+**Example:** Our app is hosted by a server with 16 gigs of RAM. To handle load, we augment the RAM to 32 gigs. Here we have *vertically* scaled the server.
+
+**How does it work?:**
+
+- We augment the power of the hardware running the app, this is the simplest way to scale as it doesn't require code refactoring or for complex configurations.
+- There is a limit to the compute power we can augment for a single server.
+    - Why?: Imagine a multi-story building. If we keep adding floors and more people need to live in the building, we can't raise the number of floors to the moon.
+    - Solution: Build more buildings, this is where *horizontal* scalability comes in.
+- When traffic is too large to be handled by one server, we bring in more servers to work together.
+- Significant downside: ***Availability*** risk, making our servers powerful but if we have few in number, there is a risk of that server going down and the entire website going offline. Another reason for *horizontal scalability*.
+
+---
+
+### Horizontal Scaling
+
+**What is it?**
+
+It means to add more servers to the existing hardware resource pool. This increases the computational power of the system as a whole.
+
+**Example:**
+
+![horizontal-scaling](resources/horizontal-scaling.png)
+
+**How does it work?:**
+
+- We can now efficiently handle increased traffic influx.
+- No limit to how much we can scale horizontally. We can keep adding servers and setting up data centers.
+- Allows for ***high availability***.
+- It allows us to scale dynamically in real-time as the traffic in the website climbs.
+    - ***Dynamic scaling is not possible when scaling vertically.***
+
+---
+
+### Cloud Elasticity
+
+**What is it?** Most prominent reason why cloud computing is mainstream is the ability to *scale dynamically*. Process of adding, removing, stretching and returning back to original infrastracture on the fly is *cloud elasticity*.
+
+**How does it work?:**
+
+- As traffic climbs, we are able to add additional servers to the *hardware resource pool*, and if it drops, we remove servers.
+- Gives us the concept of ***high availability***
+    - Multiple server nodes on the back end helps the website stay online even if some server nodes crash
