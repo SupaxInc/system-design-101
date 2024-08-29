@@ -232,3 +232,40 @@ It means to add more servers to the existing hardware resource pool. This increa
     - Not paying attention to Big-O complexity
 - Do a ***DENTAL*** check of our code when doing a dry run
     - Documentation, Exception handling, Null pointers, Time complexity, Test Coverage
+<br><br>
+
+## Improving Scalability
+
+- There are strategies to fine-tune the performance of the web application.
+- If the application is performant, it can withstand more traffic load and less resource consumption.
+- ***Performance*** is directly proportional to ***scalability***.
+- The strategies below can be implemented even before the *pre-production* testing stage.
+
+### Profiling
+
+- Profile the *helk* out of your app.
+    - Application profiler
+    - Code profiler
+    - React profiler
+- See which processes are taking too long and eating up too many resources.
+- Helps measure the space and time complexity of your code
+- **Allows to figure out issues:** concurrency errors, memory errors, robustness and safety of the program.
+
+### Caching
+
+- Cache wisely and cache everywhere, cache all *static content*
+- ***Hit database only when required, serve all read requests from the cache or use a write through cache***
+
+### CDN
+
+- Use a Content Delivery Network (CDN) servers.
+- Using a CDN further reduces the applications latency due to the proximity of the data from the requesting user.
+
+### Data Compression
+
+- Compress data by using *compression algorithms* and store data in compressed form.
+- Compress data consumes less bandwidth, the data download on the client will be faster.
+
+### Avoid Unnecessary Requests Response Cycles
+
+• No unnecessary round trips between client and server, ***batch requests into one***.
