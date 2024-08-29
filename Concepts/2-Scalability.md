@@ -269,3 +269,18 @@ It means to add more servers to the existing hardware resource pool. This increa
 ### Avoid Unnecessary Requests Response Cycles
 
 • No unnecessary round trips between client and server, ***batch requests into one***.
+<br><br>
+
+## Testing Scalability
+
+- After essential performance testing of the application, it is time for capacity planning and provisioning the right amount of hardware compute and storage power.
+- The right testing approach for *scalability* largely depends on the design of the system.
+- Testing can be performed at hardware and software level.
+- During scalabality testing, different paramaters are taken into account:
+    - CPU Usage, Network bandwidth consumption, Throughput, # of requests processed within a stipulated time, Latency, Memory usage of the program, End-user experience under heavy load.
+- Testing phase:
+    - Simulated traffic is routed to the system to study how the system behaves and scales under heavy load
+    - Contingencies are planned for unforeseen situations
+- Several load and stress tests on the application:
+    - Tools like *JMeter* are popular for running concurrent user tests for *Java Ecosystem*
+    - Cloud-based testing tools help us simulate test scenarios with a few mouse clicks
