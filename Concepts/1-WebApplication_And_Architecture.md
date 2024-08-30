@@ -590,3 +590,4 @@ Whenever new information is available on the backend, the server fires an HTTP e
 ![web-hooks](resources/web-hooks.png)
 
 Browser notifications are one example of Webhooks. Instead of visiting the websites every now and then for new info, they notify us when they publish new content.
+
