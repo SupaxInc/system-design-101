@@ -154,3 +154,129 @@ Facebook uses microservices for different services like user comments, live stre
 - **Solution**
     - Moving back to monolith, they gave up fault isolation and other pros of microservices
     - They now use a single code repository called ***Centrifuge*** that handles billions messages per day delivered to multiple APIs
+<br><br>
+
+## Micro-Frontends
+
+**What is it?**
+
+Distinct loosely coupled components of an application's user interface developed applying the concept of microservices to the front-end. It is not a technology, it is more of an ***architectural design decision and development approach.***
+
+**Example of monolithic front-end:**
+
+Typically in application architecture, if we have microservices in the *back-end* , we usually have a ***monolithic front-end*** developed by a dedicated front-end team:
+
+![monolithic-frontend](resources/monolithic-frontend.png)
+
+But with ***micro front-end*** architecture, we split our application into vertical slices. The front-end developers will only develop the UI component for that specific service. 
+
+1 - One slice goes end to end right from the UI to the database. 
+
+2 - Every ***vertical slice*** is owned by a dedicated team.
+
+3 - Every dedicated team, chooses their desired technology and later all of these components are integrated forming the complete user interface of the application. 
+
+4 - Every micro-front end team becomes more of a full stack team since it averts the need of a dedicated centralized UI team.
+
+**Example of micro front-end architecture with micro-services back-end**
+
+![microservices-frontend](resources/microservices-frontend.png)
+
+**How does it work?:**
+
+- Complete team autonomy
+    - Loosely coupled, provides fault isolation, ***freedom to pick the desired technology stack*** to the dedicated teams to develop certain services.
+- ***Able to have different front-end stacks for different back-end microservices***.
+- Fit for medium to large websites depending on use case so there are always ***tradeoffs*** involved.
+<br>
+
+### Example - E-commerce App
+
+- The ***micro front-end*** approach is pretty popular with e-commerce websites.
+- Lets create an online gaming store that will have several different UI components:
+    - **Search component**
+        - Search bar at the top center of the website that enables the users to search games based on keywords.
+        - Once a search is ran, they are able to filter search results based on several options; genre, price range, type of console, etc.
+    - **Game category component**
+        - Component displays the popular and widely searched games for different categories on the home page.
+    - **Add to cart and checkout component**
+        - UI enables users to add games to the cart
+        - Proceed to checkout where they can fill in address and other information to make final payment
+        - Ability to add coupons and gift cards
+    - **Payment component**
+        - Offers different payment options
+        - Facilitates the order payment once user enters payment details
+- Every UI component listed above, will have a dedicated microservice on the back-end powering the UI.
+- These services will be managed by full-stack teams
+
+---
+
+### Why is it needed?
+
+- A micro frontend team may own an extensive UI component like the *checkout* page
+    - Or own a minor component that fits in a particular component like the *game category* component
+    - Or even own both
+- The smaller components that integrate into other pages/components are known as ***fragments***.
+    
+    ![microfrontend-fragment](resources/microfrontend-fragment.png)
+    
+    - From the example of the E-commerce application above, it is split out in vertical slices.
+<br>
+
+---
+
+#### Easier coordination between front-end and back-end developers
+
+- Front-end devs now work along side with back-end devs on the same team
+- Saves a lot of time with cross-team coordination
+
+---
+
+#### Leveraging the right technology
+
+- We no longer need to stick to just one UI technology to build the complete front-end of the website.
+- We can select different front-end frameworks for a service (React, Angular, Vue, etc.)
+- **Example:** If we have a website in plain JavaScript, and we want to use React.
+    - We don't have to re-write the entire website to use React.
+    - Can just write specific components that need React and integrate them into the website.
+    - Here is a screenshot below of a UI, using different technology:
+        
+        ![microfront-end-right-tech](resources/microfront-end-right-tech.png)
+
+<br>
+    
+
+### Micro Front End Integration
+
+- We need to integrate our micro frontend together to have a functional website.
+    - It is done on the client and/or server
+- This concept is very similar to ***client-side*** and ***server-side rendering.***
+
+---
+
+#### Client-side integration
+
+- **A naive approach:** Rendering micro front ends using links on a website that navigates to a certain micro frontend.
+    - **Example:** Order checkout microservice hosted by AWS `https://www.aws.amazon.com/onlinegamestore/checkout` , and Payment checkout microservice hosted by Google cloud `https://www.cloud.google.com/onlinegamestore/payment`
+- **Another naive approach:** Using iframes with a specific page
+    - **Example:**
+        
+        ![microfrontend-iframe](resources/microfrontend-iframe.png)
+        
+- These approaches are not ideal, as they have several downsides:
+    - Can't be bookmarked, aren't good from an SEO standpoint, stability and performance issues.
+- **A better approach:**
+    - Using a javascript router called **Single SPA** https://single-spa.js.org/
+    - Allows you to join micro frontends together
+
+---
+
+#### Server-side integration
+
+- The complete pre-built page of the website is delivered to the client from the server
+    - As opposed to sending individual micro frontends to the client and joining them together
+- Cuts down on websites loading time, browser does not have to do heavy lifting
+- Have to write additional logic on the server to integrate micro front ends requested by user
+- **Implementation:**
+    - Using ***Project Mosaic, Open Components, and Podium***
+    - ***Server side includes (SSI)*** is a server side scripting language used to joining oncent of multiple web pages together on the web server
