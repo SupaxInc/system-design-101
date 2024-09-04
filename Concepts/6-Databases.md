@@ -151,3 +151,62 @@ This kind of data is great when running ***data analytics***, where we receive d
     - If we require a ton of relationships, like:
         - a social network app
         - knowing what friends live in a particular city or what restaurant they ate in
+<br>
+
+## NoSQL Database
+
+**What is it?** Essentially a JSON-based database built for Web 2.0.
+<br>**Example:** Used for high-frequency read/writes like real-time sport apps, MMO's, micro-blogging, etc.
+
+**How does it work?:**
+
+- **Scalability**
+    - One big limitation in SQL is scalability.
+        - SQL databases needs to be sharded, replicated to make them run smoothly on a cluster.
+        - Needs careful planning, human intervention and a certain skillset.
+    - As opposed to NoSQL
+        - Databases can add new server nodes on the fly very easily without any human intervention.
+    - Nowadays, there are billions of users connected with each other on social networks.
+    - Massive amount of data is generated every microsecond, and we need infrastructure to manage exponential growth.
+- **Ability to run on clusters**
+    - NoSQL databases are designed to run intelligently on clusters (no human intervention)
+        - Allows to scale horizontally over a cluster and across data centers
+    - However, it sacrifices: strong consistency, ACID transactions
+        - Instead it uses: ***eventually consistent***
+        - Many NoSQL systems adhere to the CAP theorem, which states that a distributed data system can only simultaneously provide two of the following three guarantees: Consistency, Availability, and Partition Tolerance. **NoSQL databases often prioritize Availability and Partition Tolerance, sometimes at the expense of strong Consistency.**
+        - This leads to the concept of "eventual consistency," where the database does not guarantee immediate consistency across all nodes but assures that all changes will propagate over time, resulting in consistency at a later point.
+
+### Pros/Cons
+
+- **Pros**
+    - **Learning curve is not steep and schemaless**
+        - More *flexibility* as opposed to SQL databases where our time needs to go in designing well-normalized tables and setting up relationships.
+        - You don't have to be a *pro* at database design
+    - **Fast lookup**
+        - Instead of a SQL query, we can fetch the JSON object using its key
+        - Allowing for a constant O(1) operation.
+- **Cons**
+    - **Inconsistency**
+        - Data is not normalized which introduces risk of it being inconsistent.
+        - Hard for DEVs to remember all locations of an entity in the database leads again to inconsistency
+    - **No support for ACID transactions**
+        - Limited to a certain entity hierarchy or a small deployment region where they can lock down nodes to update them.
+
+---
+
+### When to pick a NoSQL Database?
+
+- Handling a large number of read-write operations
+    - The ability to add nodes on the fly allows them to handle more concurrent traffic
+    - Built to handle big data with minimal latency
+    - Scalability is very easy
+- Flexibility with data modelling
+    - Expectation of things changing at a rapid pace and unsure of data model during initial phase
+- Eventual consistency over strong consistency
+- Running data analytics
+<br>
+
+## Is NoSQL More Performant Than SQL?
+
+- From a performance benchmarking standpoint, SQL and NoSQL stand side-by-side
+    - What matters the most is how we design our systems to **leverage** one of the two
