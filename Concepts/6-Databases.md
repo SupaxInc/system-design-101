@@ -155,7 +155,7 @@ This kind of data is great when running ***data analytics***, where we receive d
 
 ## NoSQL Database
 
-**What is it?** Essentially a JSON-based database built for Web 2.0.
+**What is it?** Essentially a JSON-based database built for Web 2.0 that is unstructured data.
 <br>**Example:** Used for high-frequency read/writes like real-time sport apps, MMO's, micro-blogging, etc.
 
 **How does it work?:**
@@ -206,7 +206,92 @@ This kind of data is great when running ***data analytics***, where we receive d
 - Running data analytics
 <br>
 
-## Is NoSQL More Performant Than SQL?
+---
+
+### Is NoSQL More Performant Than SQL?
 
 - From a performance benchmarking standpoint, SQL and NoSQL stand side-by-side
     - What matters the most is how we design our systems to **leverage** one of the two
+
+<br>
+
+## Document-Oriented Database
+
+**What is it?** Leading types of NoSQL databases. It stores data in a document-oriented model in independent documents. The data is generally semi-structured and stored in a JSON-like format.
+
+**Examples:** MongoDB, CouchDB, OrientDB, Google Cloud Datastore, and Amazon DocumentDB.
+
+**Why should I choose it?:**
+
+- Need a flexible schema that will change often
+    - Unsure about the database scheme at the beginning and needs to change over time
+- The need to scale fast and stay highly available
+    - Provides horizontal scalability and performant read-writes since they cater to CRUD use cases.
+    - These includes cases where we don’t need complex relational logic and need quick persistence and data retrieval.
+
+## Graph Database
+
+**What is it?** Part of the NoSQL family. It stores data in nodes/vertices and edges in the form of relationships. Each node in a graph DB represent an entity and each edge represents the relationship between entities.
+
+![graph-database](resources/graph-database.png)
+
+**Why use it?**
+
+- There may come a time when relationships stored in a relational DB become way too slow to query.
+    - Too many joins across multiple tables
+- Graph data model allows for data to be accessed with low latency
+- When you need to store complex relationships
+
+**Examples:**
+
+- Relationships between users in social networks
+    - Facebooks graph search feature uses graph data structure.
+    
+    ![graph-connections-db](resources/graph-connections-db.png)
+    
+    - The relationships are multi-dimensional, the network maps links between users and their favorite restaurants, cuisines, sports teams, etc.
+    - These relationships allow for recommendations of where to travel, dine, etc.
+    - **How does it work?**
+        - Adjacency matrix helps figure out if a relationship between two nodes exists in O(1)
+            - If the nodes in a graph contain a lot of edges, we represent it with adjacency matrix
+            - If edges are sparse then we represent the graph using adjacency list
+        - Graphs are traversed using search algorithms DFS, BFS.
+            - DFS is used to find: paths and connectivity between nodes, cycles
+            - BFS is used to find the shortest path between nodes
+
+## Key-Value Database
+
+**What is it?** Part of the NoSQL family, uses a simple key-value pairing method to store and quickly fetch data with minimum latency.
+
+**Examples:** Redis, Hazelcast, Riak, Volemort, and Memcached.
+
+**Why should I choose it?:**
+
+- Ensures constant O(1) time to be used for caching application data
+- Used to achieve a consistent state in distributed systems
+- Caching, persisting user state and sessions, managing real-time data, implementing queues and create leaderboards in online games
+
+## Time Series Database
+
+**What is it?** Optimized for tracking and persisting data that is continually read and written in the system over a period of time. *Time-series data* is data containing points associated with the occurrence of events with respect to time. It is generally ingested from IoT devices, self-driving vehicles, sensors, social networks, stock markets, etc.
+
+It is primarily used for running analytics and deducing conclusions. Helping stakeholders make future business decisions by looking at analytic results.
+
+**Why should I choose it?:**
+
+- Need to manage data in real time, continually over a long period of time
+- Built to deal with streaming data in real-time
+- Need data for analytics
+
+## Wide-Column Database
+
+**What is it?** Belong to NoSQL family and are used to handle massive amounts of data, typically called *Big Data.*
+
+Wide-column databases store data in a record with a dynamic number of columns. A record can hold billions of columns.
+
+**Examples:** Cassandra, HBase, Google Bigtable, etc.
+
+**When to pick?:**
+
+- When we need to work with massive amounts of data
+- Ensuring scalability, performance and high availability when managing Big Data
