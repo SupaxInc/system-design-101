@@ -60,22 +60,56 @@
 
 ## Read-through
 
-- Similar to the cache aside strategy. Cache in a read-through strategy always automatically stays consistent with the database.
-- The cache library, or the framework, takes the onus of maintaining consistency with the database. On the contrary, in the cache aside strategy, we have to write explicit logic to update the cache.
-- Application data in this strategy is also lazy-loaded in the cache only when the user requests it.
-- Also, the data model of the cache has to be consistent with the database since it is updated automatically by the library.
+- Read-through caching is a strategy where the cache sits between the application and the database.
+- When a read request comes in:
+  1. The application first checks the cache for the data.
+  2. If the data is in the cache (cache hit), it's returned immediately.
+  3. If the data is not in the cache (cache miss), the caching system automatically fetches it from the database, stores it in the cache, and then returns it to the application.
+- Key differences from cache-aside:
+  - The application doesn't need to know about the underlying data source. It always reads from the cache.
+  - The cache itself manages data retrieval from the database, not the application code.
+- Advantages:
+  - Simplifies application code as cache management is abstracted away.
+  - Ensures that the cache is always consistent with the database for read operations.
+- Disadvantages:
+  - Initial reads for uncached data might be slower due to the extra step of caching.
+  - Not suitable for data that changes very frequently, as the cache might become outdated quickly.
+- Like cache-aside, read-through also uses lazy loading, populating the cache only when data is requested.
+- Often used in combination with write-through or write-behind strategies to handle data updates.
 
 ## Write-through
 
-- Cache sits in line with the database. Every write goes through the cache before updating the database.
-- This maintains high data consistency between the cache and the database.
-    - Adds a little latency during the write operations since the data has to be additionally written to the cache.
-- This caching strategy works well for use cases where we need **strict data consistency** between the cache and the database. It is generally used with other caching strategies to achieve optimized performance.
+- In write-through caching, the cache sits between the application and the database.
+- When data is written:
+  1. The application writes the data to the cache.
+  2. The cache immediately writes the data to the database.
+  3. The write operation is considered complete only after both the cache and database are updated.
+- Advantages:
+  - Ensures strong consistency between the cache and the database.
+  - Reduces the risk of data loss in case of cache failures.
+- Disadvantages:
+  - Slightly higher latency for write operations due to the two-step write process.
+  - May increase the load on the database, as every write operation hits the database.
+- Best used in scenarios where data consistency is critical and write operations are not too frequent.
 
-## Write-back
+## Write-back (also known as Write-behind)
 
-- Helps optimize application hosting costs significantly.
-- Data is directly written to the cache instead of the database, and the cache, after some delay, as per the business logic, writes data to the database.
-    - Could be a ***batch operation*** that happens once in awhile to update the DB
-- This is what I pulled off in my stock market game. If there are quite a number of writes in the application, developers can reduce the frequency of database writes to cut down the load on it and the associated write operation costs.
-- A risk in this approach is if the cache fails before the DB is updated, the data might get lost. Again, this strategy is clubbed with other caching strategies to get the best of all the worlds.
+- In write-back caching, the cache again sits between the application and the database, but handles writes differently.
+- When data is written:
+  1. The application writes the data only to the cache.
+  2. The write operation is immediately considered complete.
+  3. The cache asynchronously writes the data to the database after a delay or when certain conditions are met.
+- Advantages:
+  - Significantly reduces write latency as seen by the application.
+  - Can greatly reduce database load by batching multiple writes together.
+  - Excellent for write-heavy workloads or when there are frequent updates to the same data.
+- Disadvantages:
+  - Risk of data loss if the cache fails before writing to the database.
+  - Potential consistency issues between cache and database during the delay.
+- Implementation variations:
+  - Time-based: Cache writes to database after a set interval.
+  - Size-based: Cache writes to database when it accumulates a certain amount of changes.
+  - Combination: Using both time and size thresholds.
+- Often used in scenarios where performance is critical and some level of data inconsistency can be tolerated.
+
+Both strategies can be combined with read-through or cache-aside strategies for a comprehensive caching solution tailored to specific application needs.
